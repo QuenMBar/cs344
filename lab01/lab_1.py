@@ -6,8 +6,8 @@ from gps import gps
 # Formulate the problem states and actions.
 problem = {
 
-    'initial': ['space on c', 'b on table', 'c on a', 'a on table', 'space on table'],
-    'goal': ['c on table', 'b on c', 'a on b', 'space on table', 'space on a'],
+    'initial': ['space on c', 'c on a', 'space on b', 'b on table', 'a on table', 'space on table'],
+    'goal': ['c on table', 'space on c', 'b on table', 'space on b', 'a on table', 'space on a', 'space on table'],
 
     'actions': [
         {

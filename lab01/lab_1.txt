@@ -18,4 +18,7 @@ d)
     eat banana.  Then it looks for the operator that that will fulfill its preconditions.  In this case that
     would be grasp bananas.  Then it looks for what fulfills its preconditions, and it does this
     until it arrives at its initial state.
-    iii) This code is
+    iii) This code is a version of artificial intelligence.  I think this would be logic
+    programing because it uses a set of rules to reach a conclusion. It could also be cognitive
+    modeling because it uses a model to reach its answer.
+    iv) I think that a monkey doing this in the real world would be displaying some sort of intelligence.
