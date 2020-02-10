@@ -1,13 +1,20 @@
 """
     This module implements the simple blocks world using PAIP GPS.
+    Edited by: Quentin Barnes
 """
 from gps import gps
 
 # Formulate the problem states and actions.
+"""
+This problem cant be solved by the AI since it tries to first put A on B and then
+tries to put B on C.  This is because B cant be moved while there is no space on
+B.  There is no action that can be done for the GPS to get to its next goal, so
+its plan fails.
+"""
 problem = {
 
     'initial': ['space on c', 'c on table', 'space on b', 'b on table', 'space on a', 'a on table', 'space on table'],
-    'goal': ['c on table', 'b on c', 'a on b', 'space on table', 'space on a'],
+    'goal': ['a on b', 'c on table', 'b on c', 'space on table', 'space on a'],
 
     'actions': [
         {

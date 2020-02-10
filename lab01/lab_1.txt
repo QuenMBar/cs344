@@ -5,7 +5,7 @@ Feb 8, 2020
 b)
     i) GPS in gps.py is implemented as a function.
     ii) The initial states, goal states and operators are all lists.
-    iii) The function is not recursive, only repetitive.  This is because while
+    iii) The function is not recursive, only repetitive.  This is because, while
     there is a for loop, the functions are never called within themselves.
 d)
     i) The code is based on the monkey and banana problem.  The rules of this puzzle is
@@ -14,10 +14,9 @@ d)
     with the stick.  The monkey also only knows how to move around, carry things around,
     reach for the banana, and wave the stick around.  I think that this code does not recreate
     the problem well because it doesn't include the stick and severely limits the actions the monkey has.
-    ii) The GPS algorithm first looks for what operators will achieve the goal, in this case it would be
-    eat banana.  Then it looks for the operator that that will fulfill its preconditions.  In this case that
-    would be grasp bananas.  Then it looks for what fulfills its preconditions, and it does this
-    until it arrives at its initial state.
+    ii) The GPS algorithm works by trying to complete its first goal by doing actions.  Then it
+    looks at its second goal and tries to accomplish that.  It does this until all the goals are met,
+    or that it decides that the problem can't be solved.
     iii) This code is a version of artificial intelligence.  I think this would be logic
     programing because it uses a set of rules to reach a conclusion. It could also be cognitive
     modeling because it uses a model to reach its answer.

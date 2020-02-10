@@ -1,5 +1,7 @@
 """
     This module implements the simple blocks world using PAIP GPS.
+    Edited by: Quentin Barnes
+    This is B problem from exercise 1.2
 """
 from gps import gps
 
