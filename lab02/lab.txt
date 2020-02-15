@@ -1,0 +1,38 @@
+Quentin Barnes
+Lab 02 Report
+Feb 15, 2020
+
+2.1)
+    a) Both algorithms solve the problem because there is only one peak for them to navigate to so they cant get lost.
+    b) The hill climbing algorithm is able to finish the problem quicker.
+    c) The starting value for x doesn't really for this example because there is only one peak for them to go to.
+    d) Making the delta larger than one makes the algorithms sometimes miss the solution but doesn't effect the times of them.
+       Making it smaller than one makes it so that hill climbing takes longer but doesn't effect the times of Simulated annealing.
+       The solutions can also be off, but only as large as the delta is.
+    e) The purpose of exp_schedule() is that it is one possible schedule for annealing.
+2.2)
+    a) Both algorithms don't do too well with the problem space.  This is because the problem has a bunch of slowly increasing peaks
+       that are separated by valleys.  Hill climbing is only able to go to the nearest peak while simulated annealing doesn't have large
+       enough deltas to be able to step out of it.
+    b) The starting values does matter because that is what determines what peak the algorithms are going too.
+    c) Changing the delta doesn't have too much effect on the hill climbing algorithm because it will still always go to the nearest
+       peak.  It does have some effect on the simulated annealing solution because with a higher delta it is able to step through valleys
+       easier and get better values, but it does mean that it is less precise.
+    d) The minimum value for this problem is 0 because its absolute value still, but the maximum is technically infinite given that as the
+       number increases so will the answer.  Both algorithms are trying to get to the highest number that they can.
+2.3)
+    a) The hill climbing does ok with the random restarts.  This is mainly because luck will even out any really low solutions with high
+       solutions given enough restarts.  The anneal solution did well because it has a high probability that it will find a better solution
+       than the hill climbing will.
+    b) The average values for hill climbing always stayed around 15.  This is most likely because with its good and bad scores being averaged
+       out, it landed near the middle because of randomness.  The simulated annealing was usually around 20 with the delta set at 1.  This is probably
+       because it has a higher chance to get a good solution, so it is slightly above average.
+    c) Simulated annealing did better because it has a higher probability to get a good solution compared to hill climbing.  And since it is
+       averaged out the probability is able to show.
+2.4)
+    a) I think beam search makes the most sense for simulated annealing because it jumps around a lot and it could miss some solutions because
+       of how much it is jumping around.  Checking to see if a solution is in reach at each node would be useful.
+    b) You could hold maybe 50 solutions per node.
+    c) To implement beam search I would implement hill search for every node of annealing and then check each hill search to see if its a
+       solution.  If it is then we are done.  It is different than random restarts because it is checking to see if the steps to the solution
+       is close rather than just finding a bunch of solutions and averaging them out.
