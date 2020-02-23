@@ -1,0 +1,35 @@
+Quentin Barnes
+2/22/19
+
+Lab 3 Questions
+
+3.1)
+    a) Depth first search and min conflicts didn’t work for the sudoku problems.  Depth first search probably
+    didn’t work because they were unable to use backtracking, so if it was wrong the first time it couldn’t
+    correct itself.  Min-conflicts didn’t work most likely because it couldn’t find a goal state just by
+    trying to find the least amount of conflicts.  AC-3 worked extremely well and quickly.  Backtracking
+    worked pretty well, but definitely took longer than AC-3.
+    b) When I added the extra parameters, backtracking performed as well as AC-3.  This is most likely
+    because it starts at a better place and it runs more efficiently.  Both of these settings combined worked
+    best for sudoku.
+3.2)
+    a) I found that I couldn’t get depth first search or AC3 to work for any n that I tried.  This is most
+    likely because n-queens problem is a lot less strict of a solution compared to sudoku.  Backtracking
+    worked pretty well.  I was able to run n as 32 before it started taking too long to run.  This is because
+    finding the solution becomes harder and harder, so it has to backtrack more, and it takes exponentially
+    longer to find the solution.  Finally, min-conflicts ran especially well for any n that I tried.  This is
+    most likely because it is very good at finding one of many solutions.  It only needs to find one right
+    solution, and it doesn’t care about all the other ones.
+    b) While both optional settings sped up backtracking, it was the select unassigned variable setting that
+    sped it up the most.  This is because it can find a better starting place.
+    c) Min-conflicts only requires 3 steps to do its work.  The first is it creates a random board to start
+    from.  Then it makes a series of moves to get less conflicts, all while checking for a goal state.
+3.3)
+    a) CSP problems are defined by their constraints unlike search problems which are defined by the amount
+    of possibilities.  For CSP you give the program the variables that it is looking at, the domains those
+    variables have, and the constraints the variables have in relation to the domains.  From the constraints,
+    you can find a solution that works for the variables.  In a normal search though, all you give the
+    program is the search space, the initial state, and the goal state.  It is then up the program to go
+    through each solution until it finds a goal state.
+    b) In traditional search spaces, it is much more one dimensional, while CSP can have a lot more rules
+    and guidelines.
