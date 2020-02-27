@@ -1,10 +1,10 @@
 """
-This module implements local search on a simple sine function variant.  It uses
-simulated annealing and hill climbing to do this.  It also implements random restarts
-to average out the solutions and find a max over a given number of runs.
+This module implements local search on the Traveling Salesman Problem.  It uses
+simulated annealing and hill climbing to do this.  It will randomly create a city
+that has a list of linked cities in it.  It will then use the above algorithms to
+try and find the shortest path through them.
 
 @author: Quentin Barnes
-(Based on code by kvlinden)
 """
 import math
 import time
@@ -13,51 +13,25 @@ from search import Problem, hill_climbing, simulated_annealing, \
 from random import randrange, shuffle
 
 
-# class AbsVariant(Problem):
-#     """
-#     State: x value for the abs function variant f(x)
-#     Move: a new x value delta steps from the current x (in both directions)
-#     """
-
-#     def __init__(self, initial, maximum=30.0, delta=0.001):
-#         self.initial = initial
-#         self.maximum = maximum
-#         self.delta = delta
-
-#     def actions(self, state):
-#         return [state + self.delta, state - self.delta]
-
-#     def result(self, stateIgnored, x):
-#         return x
-
-#     def value(self, x):
-#         return math.fabs(x * math.sin(x))
-#         # Thought about limiting the problem size but decided against it
-#         # if 0 <= x <= 30:
-#         #     return math.fabs(x * math.sin(x))
-#         # else:
-#        #     return 0
-
 class TPSVariant(Problem):
     """
     State: Current order of citys
-    Action: Swap 2 cities
-    Value: Total distance
+    Action: Take the city with the longest distance to the next one, then make a list
+    of all the other cities swaped with that one.
+    Value: Total distance took to travel between the cities
     """
 
-    def __init__(self, initial, citySize, cityConfig, maximum):
+    # Sets the initial state, the size of the city, the configuration of the cities, and the maximum distance
+    def __init__(self, initial, citySize, cityConfig, maximum, connectHome):
         self.initial = initial[:]
         self.citySize = citySize
         self.cityConfig = cityConfig
         self.maximum = maximum
+        self.connectHome = connectHome
 
+    # It takes the city with the max distance to the next one and then
+    # makes a list of that city swaped with each other city as the actions
     def actions(self, state):
-        # option1 = state[:]
-        # option2 = state[:]
-        # option3 = state[:]
-        # shuffle(option1)
-        # shuffle(option2)
-        # shuffle(option3)
         max = self.getMaxDistNode(state)
         options = []
         for i in range(self.citySize):
@@ -65,24 +39,27 @@ class TPSVariant(Problem):
                 newOption = state[:]
                 newOption[i], newOption[max] = newOption[max], newOption[i]
                 options.append(newOption[:])
-        # print("State: ", state)
-        # print("Max: ", max)
-        # print("Options: ", options)
-        return [options]
+        return options[:]
 
+    # Result is the action taken
     def result(self, state, action):
-        return action
+        return action[:]
 
+    # Inverts the realValue since the algorithms are looking for a maximum,
+    # while we are looking for the minimum distance
     def value(self, state):
         return self.maximum - self.realValue(state)
 
+    # Uses the city configuration to sum up the total distance that the salesman travels
     def realValue(self, state):
-        print(state)
         totalDist = 0
         for i in range(self.citySize - 1):
             totalDist += self.cityConfig[state[i]][state[i + 1]]
+        if self.connectHome:
+            totalDist += self.cityConfig[self.citySize-1][1]
         return totalDist
 
+    # Finds and returns the index of the node with the max distance
     def getMaxDistNode(self, state):
         indexOfMax = 0
         lengthOfMax = 0
@@ -95,9 +72,13 @@ class TPSVariant(Problem):
 
 if __name__ == '__main__':
 
-    # Formulate a problem with a 2D hill function and a single maximum value.
-    fillInSize = citySize = 10
-    maxDistance = 10
+    # Sets the values of how large the city is and the max distance between them
+    # Also sets if the problem should be a loop or not
+    fillInSize = citySize = 30
+    maxDistance = 20
+    connectHome = False
+
+    # Creates the city configuration
     maximum = citySize * maxDistance
     cityConfig = [[0 for x in range(citySize)] for y in range(citySize)]
     for i in range(citySize):
@@ -106,53 +87,32 @@ if __name__ == '__main__':
             cityConfig[i + j + 1][i] = cityConfig[i][i +
                                                      j + 1] = randrange(1, maxDistance, 1)
 
-    # print(cityConfig)
+    # Creates an initial state
+    totalHill = 0
+    totalSim = 0
+    for i in range(100):
+        initial = [x for x in range(citySize)]
+        shuffle(initial)
 
-    initial = [x for x in range(citySize)]
-    shuffle(initial)
+        p = TPSVariant(initial, citySize, cityConfig, maximum, connectHome)
 
-    p = TPSVariant(initial, citySize, cityConfig, maximum)
+        time1 = time.time()
+        hill_solution = hill_climbing(p)
+        time2 = time.time()
 
-    hill_solution = hill_climbing(p)
-    # simAneal = simulated_annealing(
-    #     p,
-    #     exp_schedule(k=20, lam=0.005, limit=1000)
-    # )
+        simAneal = simulated_annealing(
+            p,
+            exp_schedule(k=20, lam=0.005, limit=1000)
+        )
+        time3 = time.time()
+        totalHill += p.realValue(hill_solution)
+        totalSim += p.realValue(simAneal)
 
-    print("Initial: ", initial, ".  Value: ", p.realValue(initial))
-    print("Hill Climbing solution: ", hill_solution,
-          ".  And length: ", p.realValue(hill_solution))
-    # print("Sim Anneal solution: ", simAneal,
-    #       ".  And length: ", p.realValue(simAneal))
+    print(totalHill / 100)
+    print(totalSim/100)
 
-    # For loop to do find solutions to random starting variables
-    # for count in range(restartTimes):
-    # initial = randrange(0, maximum)
-    #     time1 = time.time()
-    #     p = AbsVariant(initial, maximum, delta=1)
-    #     time2 = time.time()
-    #     totalValInit += p.value(initial)
-    #     timeForInit += (time2 - time1)
-    #     if maxValInit < p.value(initial):
-    #         maxValInit = p.value(initial)
-
-    #     # Solve the problem using hill-climbing.
-    #     time1 = time.time()
-    #     hill_solution = hill_climbing(p)
-    #     time2 = time.time()
-    #     totalValHill += p.value(hill_solution)
-    #     timeForHill += (time2 - time1)
-    #     if maxValHill < p.value(hill_solution):
-    #         maxValHill = p.value(hill_solution)
-
-    #     # Solve the problem using simulated annealing.
-    #     time1 = time.time()
-    # annealing_solution = simulated_annealing(
-    #         p,
-    #         exp_schedule(k=20, lam=0.005, limit=1000)
-    #     )
-    #     time2 = time.time()
-    #     totalValAnneal += p.value(annealing_solution)
-    #     timeForAnneal += (time2 - time1)
-    #     if maxValAnneal < p.value(annealing_solution):
-    #         maxValAnneal = p.value(annealing_solution)
+    print("Initial: \t\t\t\t\t", initial, "  Distance: ", p.realValue(initial))
+    print("Hill Climbing solution: \t", hill_solution,
+          "  Distance: ", p.realValue(hill_solution), "  Time: ", (time2 - time1))
+    print("Sim Anneal solution: \t\t", simAneal,
+          "  Distance: ", p.realValue(simAneal), "  Time: ", (time3 - time2))
