@@ -52,12 +52,23 @@ class TPSVariant(Problem):
         self.maximum = maximum
 
     def actions(self, state):
-        option1 = state[:]
-        option2 = state[:]
-        shuffle(option1)
-        shuffle(option2)
-        print(state, ": ", option1, ", ", option2)
-        return [option1, option2]
+        # option1 = state[:]
+        # option2 = state[:]
+        # option3 = state[:]
+        # shuffle(option1)
+        # shuffle(option2)
+        # shuffle(option3)
+        max = self.getMaxDistNode(state)
+        options = []
+        for i in range(self.citySize):
+            if i != max:
+                newOption = state[:]
+                newOption[i], newOption[max] = newOption[max], newOption[i]
+                options.append(newOption[:])
+        # print("State: ", state)
+        # print("Max: ", max)
+        # print("Options: ", options)
+        return [options]
 
     def result(self, state, action):
         return action
@@ -66,10 +77,20 @@ class TPSVariant(Problem):
         return self.maximum - self.realValue(state)
 
     def realValue(self, state):
+        print(state)
         totalDist = 0
         for i in range(self.citySize - 1):
             totalDist += self.cityConfig[state[i]][state[i + 1]]
         return totalDist
+
+    def getMaxDistNode(self, state):
+        indexOfMax = 0
+        lengthOfMax = 0
+        for n in range(self.citySize - 1):
+            if self.cityConfig[state[n]][state[n + 1]] > lengthOfMax:
+                indexOfMax = n
+                lengthOfMax = self.cityConfig[state[n]][state[n + 1]]
+        return indexOfMax
 
 
 if __name__ == '__main__':
@@ -93,10 +114,16 @@ if __name__ == '__main__':
     p = TPSVariant(initial, citySize, cityConfig, maximum)
 
     hill_solution = hill_climbing(p)
+    # simAneal = simulated_annealing(
+    #     p,
+    #     exp_schedule(k=20, lam=0.005, limit=1000)
+    # )
 
     print("Initial: ", initial, ".  Value: ", p.realValue(initial))
     print("Hill Climbing solution: ", hill_solution,
           ".  And length: ", p.realValue(hill_solution))
+    # print("Sim Anneal solution: ", simAneal,
+    #       ".  And length: ", p.realValue(simAneal))
 
     # For loop to do find solutions to random starting variables
     # for count in range(restartTimes):
