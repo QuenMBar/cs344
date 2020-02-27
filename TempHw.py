@@ -10,7 +10,7 @@ import math
 import time
 from search import Problem, hill_climbing, simulated_annealing, \
     exp_schedule, genetic_search
-from random import randrange
+from random import randrange, shuffle
 
 
 # class AbsVariant(Problem):
@@ -38,24 +38,69 @@ from random import randrange
 #         # else:
 #        #     return 0
 
+class TPSVariant(Problem):
+    """
+    State: Current order of citys
+    Action: Swap 2 cities
+    Value: Total distance
+    """
+
+    def __init__(self, initial, citySize, cityConfig, maximum):
+        self.initial = initial[:]
+        self.citySize = citySize
+        self.cityConfig = cityConfig
+        self.maximum = maximum
+
+    def actions(self, state):
+        option1 = state[:]
+        option2 = state[:]
+        shuffle(option1)
+        shuffle(option2)
+        print(state, ": ", option1, ", ", option2)
+        return [option1, option2]
+
+    def result(self, state, action):
+        return action
+
+    def value(self, state):
+        return self.maximum - self.realValue(state)
+
+    def realValue(self, state):
+        totalDist = 0
+        for i in range(self.citySize - 1):
+            totalDist += self.cityConfig[state[i]][state[i + 1]]
+        return totalDist
+
 
 if __name__ == '__main__':
 
     # Formulate a problem with a 2D hill function and a single maximum value.
     fillInSize = citySize = 10
-    maximum = citySize
+    maxDistance = 10
+    maximum = citySize * maxDistance
     cityConfig = [[0 for x in range(citySize)] for y in range(citySize)]
     for i in range(citySize):
         fillInSize -= 1
         for j in range(fillInSize):
             cityConfig[i + j + 1][i] = cityConfig[i][i +
-                                                     j + 1] = randrange(1, 10, 1)
+                                                     j + 1] = randrange(1, maxDistance, 1)
 
-    print(cityConfig)
+    # print(cityConfig)
+
+    initial = [x for x in range(citySize)]
+    shuffle(initial)
+
+    p = TPSVariant(initial, citySize, cityConfig, maximum)
+
+    hill_solution = hill_climbing(p)
+
+    print("Initial: ", initial, ".  Value: ", p.realValue(initial))
+    print("Hill Climbing solution: ", hill_solution,
+          ".  And length: ", p.realValue(hill_solution))
 
     # For loop to do find solutions to random starting variables
     # for count in range(restartTimes):
-    #     initial = randrange(0, maximum)
+    # initial = randrange(0, maximum)
     #     time1 = time.time()
     #     p = AbsVariant(initial, maximum, delta=1)
     #     time2 = time.time()
@@ -75,7 +120,7 @@ if __name__ == '__main__':
 
     #     # Solve the problem using simulated annealing.
     #     time1 = time.time()
-    #     annealing_solution = simulated_annealing(
+    # annealing_solution = simulated_annealing(
     #         p,
     #         exp_schedule(k=20, lam=0.005, limit=1000)
     #     )
