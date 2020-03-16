@@ -1,0 +1,4 @@
+The entropy before the split is 1 since there are an equal amount of yes and nos.  The information gain comes out to
+0.1957.  This is done by computing the splits entropies and then scaling them by their weights and adding them together.
+While this question does provide some information gain, because the data about being hungry doesnt lead to
+a clear answer, it doesnt help alot.

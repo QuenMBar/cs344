@@ -1,0 +1,32 @@
+We want the machine learned model to:
+I want to predict what news people will find most useful.
+
+Our ideal outcome is:
+My ideal outcome is to allow people to find the news they want with less time searching for it.
+
+Our success metrics are:
+How long it takes to find news sources people are searching for, and the accuracy of the search.
+
+Our key results (KR) for the success metrics are:
+The time it takes.
+
+Our ML model is deemed a failure if:
+It takes longer to find the news than before.
+
+The output from our ML model will be:
+The time it takes for a user to find the information they want, and how satisfied they are with it.
+
+The output is defined as:
+Time and ratings
+
+The output from the ML model will be made:
+A timer and a survey
+
+The outcome will be used for:
+Recommending better news articles in the future
+
+If we didn't use ML, we would:
+Sort the news by hand
+
+Our problem is best framed as:
+Multi-class multi-label classification
